@@ -1,0 +1,68 @@
+common:
+    lid_topic:  "/hori/hesai/pandar"
+    lid_topic_vert:  "/vert/hesai/pandar"
+    imu_topic:  "/imu/data"
+    time_sync_en: false         # ONLY turn on when external time synchronization is really not possible
+    time_offset_lidar_to_imu: 0.006664 # Time offset between lidar and IMU calibrated by other algorithms, e.g. LI-Init (can be found in README).
+                                  # This param will take effect no matter what time_sync_en is. So if the time offset is not known exactly, please set as 0.0
+
+preprocess:
+    lidar_type: 5                # Hesai PandarXT
+    scan_line: 16
+    scan_rate: 10                # only need to be set for velodyne, unit: Hz,
+    blind: 0.2
+    pre_filter: false             # added by jxf @2023.6.20 filter the bleeding point
+    noise_threshold: 0.007
+
+mapping:
+    acc_cov: 0.1
+    gyr_cov: 0.1
+    b_acc_cov: 0.0001
+    b_gyr_cov: 0.0001
+    fov_degree:    180
+    det_range:     100.0
+    extrinsic_est_en:  true      # true: enable the online estimation of IMU-LiDAR extrinsic,
+    extrinsic_T: [ -0.008782, 0.029697, 0.106168]
+    extrinsic_R: [ 0.999866, -0.016332, -0.001402, 
+                   0.016329,  0.999864, -0.002112,
+                   0.001436,  0.002088,  0.999997]
+#    extrinsic_T: [ -0.008782, 0.039423, -0.143801]
+#    extrinsic_R: [ 0.999989, 0.001383, -0.004526, 
+#                   -0.001448, 0.999896, -0.014341,
+#                   0.004505, 0.014347, 0.999887]
+    #hesai backpach
+    extrinsic_V2H: [   0.999009669024373, 0.00171738824070707,  0.0444587290281335,  0.0013063217144669,
+-0.0443959372987554, -0.0270370367329938 ,  0.998647745814715  , 0.326330030494018,
+0.00291705638747281,   -0.99963280097311, -0.0269340926708022 , -0.376357908308162,
+                  0,                   0     ,              0   ,                1]
+#    extrinsic_V2H: [   0.998476495601853,  0.0111401028432913,  0.0540421908974973,  0.0187283403231740,
+#  -0.0539337511702291,  -0.00979739024618025,  0.998496433889387,  0.325772538307169,
+#  0.0116527861538385,  -0.999889746187635,  -0.00918169885967874,  -0.352945342155607,
+#   0.0000000e+00,   0.0000000e+00,   0.0000000e+00,   1.0000000e+00]
+    #velodyne backpach
+   # extrinsic_V2H: [2.1597036e-02,  -1.2308785e-03,  -9.9976600e-01,  #-2.9633960e-01,
+  #                  -9.9976566e-01,  -1.5069292e-03,  -2.1595174e-02,  -1.8452883e-02,
+  #                  -1.4799955e-03,   9.9999811e-01,  -1.2631352e-03,  -3.3448044e-01,
+  #                  0.0000000e+00,   0.0000000e+00,   0.0000000e+00,   1.0000000e  +00]
+
+publish:
+    path_en:  false
+    scan_publish_en:  true       # false: close all the point cloud output
+    dense_publish_en: true       # false: low down the points number in a global-frame point clouds scan.
+    scan_bodyframe_pub_en: true  # true: output the point cloud scans in IMU-body-frame
+
+pcd_save:
+    pcd_save_en: true
+    interval: 1               # how many LiDAR frames saved in each pcd file; 
+                                 # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+
+pc_reg:
+    dual_LiDAR_en: true
+
+loop:
+    loop_en: false
+    loopInterval: 30    # loop  scale of the time
+    loopDistance: 2     #loop  scale of the distance
+    icpMatchScoreThre: 0.05      #the more higher scores,the  wrong loop
+    
+

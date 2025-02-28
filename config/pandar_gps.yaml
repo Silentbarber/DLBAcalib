@@ -1,0 +1,55 @@
+common:
+    lid_topic:  "/points_raw"
+    lid_topic_vert:  "/vert/hesai/pandar"
+    imu_topic:  "/imu_raw"
+    time_sync_en: false         # ONLY turn on when external time synchronization is really not possible
+    time_offset_lidar_to_imu: 0 # Time offset between lidar and IMU calibrated by other algorithms, e.g. LI-Init (can be found in README).
+                                  # This param will take effect no matter what time_sync_en is. So if the time offset is not known exactly, please set as 0.0
+
+preprocess:
+    lidar_type: 2                # Hesai PandarXT
+    scan_line: 16
+    scan_rate: 10                # only need to be set for velodyne, unit: Hz,
+    blind: 1
+
+mapping:
+    acc_cov: 3.9939570888238808e-03
+    gyr_cov: 1.5636343949698187e-03
+    b_acc_cov: 6.4356659353532566e-05
+    b_gyr_cov: 3.5640318696367613e-05
+    fov_degree:    180
+    det_range:     100.0
+    extrinsic_est_en:  true      # true: enable the online estimation of IMU-LiDAR extrinsic,
+    extrinsic_T: [ 0, 0, 0]
+    extrinsic_R: [ -1, 0, 0, 
+                   0, 1, 0, 
+                   0, 0, -1]
+
+    #hesai backpach
+    extrinsic_V2H: [   0.999009669024373, 0.00171738824070707,  0.0444587290281335,  0.0013063217144669,
+-0.0443959372987554, -0.0270370367329938 ,  0.998647745814715  , 0.326330030494018,
+0.00291705638747281,   -0.99963280097311, -0.0269340926708022 , -0.376357908308162,
+                  0,                   0     ,              0   ,                1]
+
+
+publish:
+    path_en:  false
+    scan_publish_en:  true       # false: close all the point cloud output
+    dense_publish_en: true       # false: low down the points number in a global-frame point clouds scan.
+    scan_bodyframe_pub_en: true  # true: output the point cloud scans in IMU-body-frame
+
+pcd_save:
+    pcd_save_en: true
+    interval: 1               # how many LiDAR frames saved in each pcd file; 
+                                 # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+
+pc_reg:
+    dual_LiDAR_en: true
+
+loop:
+    loop_en: false
+    loopInterval: 30    # loop  scale of the time
+    loopDistance: 10     #loop  scale of the distance
+    icpMatchScoreThre: 0.3      #the more higher scores,the  wrong loop
+    
+

@@ -1,0 +1,58 @@
+common:
+    lid_topic:  "/hori/hesai/pandar"
+    lid_topic_vert:  "/vert/hesai/pandar"
+    imu_topic:  "/imu/data"
+    time_sync_en: false         # ONLY turn on when external time synchronization is really not possible
+    time_offset_lidar_to_imu: -0.013439 # Time offset between lidar and IMU calibrated by other algorithms, e.g. LI-Init (can be found in README).
+                                  # This param will take effect no matter what time_sync_en is. So if the time offset is not known exactly, please set as 0.0
+
+preprocess:
+    lidar_type: 5                # Hesai PandarXT
+    scan_line: 32
+    scan_rate: 10                # only need to be set for velodyne, unit: Hz,
+    blind: 0.2
+    # added by wsj@2023-12-27 remove feet
+    vert_remove_radius: 0.6
+
+mapping:
+    acc_cov: 0.1
+    gyr_cov: 0.1
+    b_acc_cov: 0.0001
+    b_gyr_cov: 0.0001
+    fov_degree:    180
+    det_range:     100.0
+    extrinsic_est_en:  true      # true: enable the online estimation of IMU-LiDAR extrinsic,
+    extrinsic_T: [-0.020203, 0.004328, 0.111578]
+    extrinsic_R: [ 0.999524,-0.029124,0.010167, 
+                   0.029102,0.999574,0.002316,
+                   -0.010230,-0.002019,0.999946]
+# extrinsic_V2H:  [-1,0,0,0,0,0,-1,-0.4,0,-1,0,-0.8,0,0,0,1]
+
+#extrinsic_V2H:  [-0.99984021,0.0176859,0.0026022,0.03006832,0.00232746,0.01553733,-0.99987658,-0.35902989,-0.01772414,-0.99972286,-0.01549369,-0.85014638,0,0,0,1]
+#2024-3-11 extrinsic_V2H: [-0.99981832,0.0189264,0.00226227,0.05261136,0.00269258,0.01584527,-0.99987083,-0.35958882,-0.01895984,-0.99969522,-0.01581103,-0.8575945,0,0,0,1]     
+    extrinsic_V2H: [-0.99972468,0.02269297,0.00596232,0.00351324,
+-0.00397535,0.08661985,-0.99623355,-0.42781387,
+-0.02312395,-0.99598289,-0.08650579,-0.81719419,
+0,0,0,1
+]     
+
+publish:
+    path_en:  true
+    scan_publish_en:  true       # false: close all the point cloud output
+    dense_publish_en: false       # false: low down the points number in a global-frame point clouds scan.
+    scan_bodyframe_pub_en: true  # true: output the point cloud scans in IMU-body-frame
+
+pcd_save:
+    pcd_save_en: true
+    interval: 1                 # how many LiDAR frames saved in each pcd file; 
+                                 # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+
+pc_reg:
+    dual_LiDAR_en: true
+
+loop:
+    loop_en: false
+    loopInterval: 30    # loop  scale of the time
+    loopDistance: 2     #loop  scale of the distance
+    icpMatchScoreThre: 0.05      #the more higher scores,the  wrong loop
+    
