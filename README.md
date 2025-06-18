@@ -1,1 +1,2 @@
 A novel targetless extrinsic calibration method for dual LiDARs, addressing non-overlapping fields of view and imprecise initial parameters. Our framework integrates sliding-window LiDAR bundle adjustment (LBA) with adaptive voxelization, eliminating reliance on artificial markers or manual tuning.
+Unfortunately, we regret to inform you that our paper was not accepted by IROS. I will continue to delve deeper into related work in the future, and once the code algorithm is sufficiently excellent, I will fully open it up
